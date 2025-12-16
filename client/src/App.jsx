@@ -45,6 +45,23 @@ function App() {
 		updateOnlineStatus(onlineStatus);
 	}, [onlineStatus]);
 
+	 useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      // Check if user is in chat mode (on /founduser route)
+      const isInChat = window.location.pathname === '/founduser';
+      if (isInChat) {
+        event.preventDefault();
+        event.returnValue = '';
+        return '';
+      }
+    };
+    
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
 	return (
 		<div className={`flex flex-col-reverse md:flex-row h-screen ${settings.theme && 'dark'}`}>
 			<Toaster position="top-center" reverseOrder={false} />
